@@ -1,6 +1,9 @@
 <template>
   <div class="statistics-tabs">
     <el-tabs v-model="activeName" type="border-card">
+      <el-tab-pane label="邀请与回收" name="survey" lazy>
+        <survey-report />
+      </el-tab-pane>
       <el-tab-pane label="统计视图" name="chart">
         <chart />
       </el-tab-pane>
@@ -14,10 +17,12 @@
 <script>
 import chart from './chart'
 import analysis from './analysis'
+import SurveyReport from '../survey/Report.vue'
 
 export default {
   name: 'ProjectStatistics',
   components: {
+    SurveyReport,
     chart,
     analysis
   },
@@ -33,6 +38,7 @@ export default {
 
 <style scoped>
 .statistics-tabs {
+  overflow-y: auto;
   padding: 24px;
   height: 100%;
   box-sizing: border-box;
