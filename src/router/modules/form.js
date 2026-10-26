@@ -5,6 +5,11 @@ export default [
     component: () => import(/* webpackChunkName: 'root' */ '@/views/form'),
     children: [
       {
+        path: 'survey',
+        meta: { requireLogin: true },
+        component: () => import('@/views/form/survey')
+      },
+      {
         path: '',
         meta: { requireLogin: true },
         component: () => import(/* webpackChunkName: 'root' */ '@/views/form/editor')

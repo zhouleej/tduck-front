@@ -101,6 +101,11 @@ export default {
           route: '/project/form/setting'
         },
         {
+          title: '调研对象',
+          icon: 'el-icon-user',
+          route: '/project/form/survey'
+        },
+        {
           title: '发布',
           icon: 'el-icon-video-play',
           route: '/project/form/publish'
