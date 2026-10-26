@@ -1,5 +1,10 @@
 export default [
   {
+    path: '/i/:token',
+    meta: { requireLogin: false },
+    component: () => import('@/views/form/write')
+  },
+  {
     path: '/project',
     meta: { requireLogin: true },
     component: () => import(/* webpackChunkName: 'root' */ '@/views/home'),

@@ -1,5 +1,6 @@
 <template>
   <div class="write-container">
+    <el-alert v-if="invitationNotice" :title="invitationNotice" type="info" :closable="false" show-icon />
     <form-qrcode />
     <h1 id="inActiveTime" style="display: none" />
     <div v-cloak v-if="writeStatus == 0">
@@ -39,6 +40,7 @@ import { checkWritePwdRequest, getPublicSettingsRequest, getWriteSettingStatusRe
 import { jumpUrl } from './SubmitJump'
 import { checkWriteCountCap, saveWriteCount } from '@/views/form/write/DeviceWriteCount'
 import FormQrcode from '@/views/form/write/FormQrcode.vue'
+import { resolveInvitation, recordInvitationVisit } from '@/api/project/invitation'
 
 const uaParser = require('ua-parser-js')
 const ua = uaParser(navigator.userAgent)
@@ -62,6 +64,9 @@ export default {
   data() {
     return {
       formKey: '',
+      invitationToken: '',
+      invitationNotice: '',
+      invitationVisitRecorded: false,
       writePassword: '',
       inActiveTime: 0,
       formConfig: {
@@ -101,6 +106,18 @@ export default {
   },
   async created() {
     this.formKey = this.$route.query.key || this.$route.params.key
+    if (this.$route.params.token) {
+      this.invitationToken = this.$route.params.token
+      try {
+        const invitation = await resolveInvitation(this.invitationToken)
+        this.formKey = invitation.data.formKey
+        this.invitationNotice = invitation.data.notice
+      } catch (e) {
+        this.writeStatus = 0
+        this.writeNotStartPrompt = e.msg || '邀请链接无效或问卷已停止收集'
+        return
+      }
+    }
     // cookie获取微信用户信息
     this.getCookieAuthorizationUserInfo()
     // 微信授权重定向到该页 会携带code参数
@@ -112,9 +129,10 @@ export default {
     // 微信逻辑授权结束 授权地址
     this.getWxAuthorizationUrl()
     // 检查是否能进入填写
-    this.queryProjectSettingStatus()
+    await this.queryProjectSettingStatus()
     // 查询相关设置 检查是否能打开等
     let settingRes = await this.queryProjectSetting()
+    if (this.writeStatus === 1) this.recordInviteVisit()
     // 非微信环境不加载微信相关 加快访问速度
     if (constants.enableWx && isWxEnv()) {
       // 加载微信相关 获取签名
@@ -128,7 +146,7 @@ export default {
   methods: {
     queryProjectSettingStatus() {
       // 是否能进入填写
-      getWriteSettingStatusRequest({
+      return getWriteSettingStatusRequest({
         formKey: this.formKey,
         type: this.writeType,
         wxOpenId: this.wxUserInfo ? this.wxUserInfo.openid : ''
@@ -218,6 +236,7 @@ export default {
         password: this.writePassword
       }).then((res) => {
         this.writeStatus = 1
+        this.recordInviteVisit()
       })
     },
     async submitForm(data) {
@@ -227,6 +246,7 @@ export default {
       this.submitFormData.wxOpenId = this.wxUserInfo ? this.wxUserInfo.openid : ''
       this.submitFormData.originalData = data.formModel
       this.submitFormData.formKey = this.formKey
+      this.submitFormData.invitationToken = this.invitationToken || undefined
       this.submitFormData.formId = data.formId
       this.submitFormData.formType = this.$refs.bizProjectForm.formConf.formType
       let res = null
@@ -238,6 +258,11 @@ export default {
       this.handleSubmitSuccess(res.data)
     },
     // 提交成功后处理
+    recordInviteVisit() {
+      if (!this.invitationToken || this.invitationVisitRecorded) return
+      this.invitationVisitRecorded = true
+      recordInvitationVisit(this.invitationToken).catch(() => { this.invitationVisitRecorded = false })
+    },
     handleSubmitSuccess(data) {
       this.submitResult = data
       // 删除临时缓存数据
