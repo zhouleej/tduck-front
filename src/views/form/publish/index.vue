@@ -222,7 +222,9 @@ export default {
 <style lang="scss" scoped>
 .publish-container {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
   padding: 40px 20px;
   background-color: transparent;
   display: flex;
