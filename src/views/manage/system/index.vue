@@ -68,6 +68,7 @@
                 <div class="form-hint">选择用于发送验证码或通知的服务商，移动云云信还支持问卷短信邀请</div>
               </el-form-item>
               <template v-if="form.type === 'YUNXIN'">
+                <survey-sms-config :form="form" />
                 <el-alert
                   title="请填写移动云信开户信息；问卷邀请模板与验证码模板分别配置，均须审核通过。"
                   type="info"
@@ -221,10 +222,11 @@ import ConfigMixin from './subconfig/ConfigMixin'
 import SystemInfoConfig from './subconfig/SystemInfoConfig.vue'
 import OssConfig from './subconfig/OssConfig.vue'
 import DeepSeekConfig from './subconfig/DeepSeekConfig.vue'
+import SurveySmsConfig from './subconfig/SurveySmsConfig.vue'
 
 export default {
   name: 'ConfigForm',
-  components: { SystemInfoConfig, OssConfig, DeepSeekConfig },
+  components: { SystemInfoConfig, OssConfig, DeepSeekConfig, SurveySmsConfig },
   mixins: [ConfigMixin],
   data() {
     const digitsRule = (length) => [

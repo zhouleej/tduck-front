@@ -106,6 +106,11 @@ export default {
           route: '/project/form/survey'
         },
         {
+          title: '短信模板',
+          icon: 'el-icon-document',
+          route: '/project/form/sms-templates'
+        },
+        {
           title: '发布',
           icon: 'el-icon-video-play',
           route: '/project/form/publish'
