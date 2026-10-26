@@ -5,6 +5,11 @@ export default [
     component: () => import(/* webpackChunkName: 'root' */ '@/views/form'),
     children: [
       {
+        path: 'sms-invitations',
+        meta: { requireLogin: true },
+        component: () => import('@/views/form/survey/Batches.vue')
+      },
+      {
         path: 'sms-templates',
         meta: { requireLogin: true },
         component: () => import('@/views/form/survey/Templates.vue')

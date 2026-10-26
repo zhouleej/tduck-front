@@ -111,6 +111,11 @@ export default {
           route: '/project/form/sms-templates'
         },
         {
+          title: '短信邀请',
+          icon: 'el-icon-message',
+          route: '/project/form/sms-invitations'
+        },
+        {
           title: '发布',
           icon: 'el-icon-video-play',
           route: '/project/form/publish'
