@@ -63,9 +63,52 @@
                   <el-option label="阿里云" value="ALIYUN" />
                   <el-option label="腾讯云" value="TENCENT_CLOUD" />
                   <el-option label="中昱维信" value="VEESING" />
+                  <el-option label="移动云云信" value="YUNXIN" />
                 </el-select>
-                <div class="form-hint">选择用于发送系统验证码或通知的短信服务商</div>
+                <div class="form-hint">选择用于发送验证码或通知的服务商，移动云云信还支持问卷短信邀请</div>
               </el-form-item>
+              <template v-if="form.type === 'YUNXIN'">
+                <el-alert
+                  title="请填写移动云信开户信息；问卷邀请模板与验证码模板分别配置，均须审核通过。"
+                  type="info"
+                  :closable="false"
+                  show-icon
+                  class="mb-20"
+                />
+                <el-form-item
+                  v-for="field in yunxinFields"
+                  :key="field.prop"
+                  :label="field.label"
+                  :prop="field.prop"
+                  :rules="field.rules"
+                >
+                  <el-input
+                    v-model="form[field.prop]"
+                    :placeholder="field.placeholder"
+                    :show-password="field.secret || false"
+                    class="modern-input"
+                  />
+                  <div class="form-hint">{{ field.hint }}</div>
+                </el-form-item>
+                <el-form-item label="发送接口路径" prop="yunxinSendPath">
+                  <el-select v-model="form.yunxinSendPath" placeholder="默认使用 V2 发送接口" style="width: 100%">
+                    <el-option label="V2 接口（文档定义，默认）" value="/prod-api/tripartite/task/v2/send" />
+                    <el-option label="原版接口（文档示例）" value="/prod-api/tripartite/task/send" />
+                  </el-select>
+                  <div class="form-hint">按实际网关选择，未选择时默认使用 V2 接口</div>
+                </el-form-item>
+                <el-form-item label="问卷邀请默认模板 ID" prop="yunxinInvitationTemplateId">
+                  <el-input
+                    v-model="form.yunxinInvitationTemplateId"
+                    placeholder="请输入审核通过的问卷邀请模板 ID"
+                    class="modern-input"
+                  />
+                  <div class="form-hint">
+                    发布页可指定模板。推荐模板中固定问卷域名及 /s/，使用 #params_1# 接收问卷编号，避免完整链接超过变量
+                    20 字符限制
+                  </div>
+                </el-form-item>
+              </template>
               <el-form-item
                 v-if="form.type == 'VEESING' || form.type == 'TENCENT_CLOUD'"
                 :rules="[{ required: true, message: '请输入appId', trigger: 'blur' }]"
@@ -85,6 +128,7 @@
                 <div class="form-hint">对应服务商控制台中的 API 密钥 ID</div>
               </el-form-item>
               <el-form-item
+                v-if="form.type !== 'YUNXIN'"
                 :rules="[{ required: true, message: '请输入密钥', trigger: 'blur' }]"
                 :label="form.type == 'VEESING' ? 'AppKey' : form.type == 'ALIYUN' ? 'AccessKeySecret' : 'SecretKey'"
                 prop="secretKey"
@@ -102,12 +146,15 @@
                 <div class="form-hint">已在服务商处审核通过的短信签名，如：Tduck</div>
               </el-form-item>
               <el-form-item
-                :rules="[{ required: true, message: '请输入模板id', trigger: 'blur' }]"
-                label="短信模板 ID"
+                :rules="[{ required: form.type !== 'YUNXIN', message: '请输入模板id', trigger: 'blur' }]"
+                label="短信验证码模板 ID"
                 prop="templateId"
               >
                 <el-input v-model="form.templateId" placeholder="请输入模板id" class="modern-input" />
-                <div class="form-hint">已在服务商处审核通过的短信验证码模板 ID</div>
+                <div class="form-hint">
+                  已在服务商处审核通过的短信验证码模板 ID。云信仅发送问卷邀请时可不填；验证码模板用 #params_1#
+                  接收验证码
+                </div>
               </el-form-item>
               <el-form-item class="form-action">
                 <el-button type="primary" class="modern-btn" @click="handleSubmit"> 保 存 配 置</el-button>
@@ -179,6 +226,75 @@ export default {
   name: 'ConfigForm',
   components: { SystemInfoConfig, OssConfig, DeepSeekConfig },
   mixins: [ConfigMixin],
+  data() {
+    const digitsRule = (length) => [
+      { required: true, message: `请输入 ${length} 位数字`, trigger: 'blur' },
+      { pattern: new RegExp(`^[0-9]{${length}}$`), message: `必须为 ${length} 位数字，请保留前导零`, trigger: 'blur' }
+    ]
+    return {
+      yunxinFields: [
+        {
+          prop: 'yunxinBaseUrl',
+          label: '云信网关地址',
+          placeholder: '例如：https://gateway.example.com',
+          hint: '开户方提供的网关根地址，仅含协议、主机和可选端口',
+          rules: [
+            { required: true, message: '请输入云信网关地址', trigger: 'blur' },
+            {
+              validator: (rule, value, callback) => {
+                try {
+                  const url = new URL(value)
+                  if (
+                    !['http:', 'https:'].includes(url.protocol) ||
+                    !url.hostname ||
+                    url.username ||
+                    url.password ||
+                    url.search ||
+                    url.hash ||
+                    url.pathname !== '/'
+                  )
+                    throw new Error()
+                  callback()
+                } catch (e) {
+                  callback(new Error('请填写仅包含 http(s) 协议、主机和端口的地址'))
+                }
+              },
+              trigger: 'blur'
+            }
+          ]
+        },
+        {
+          prop: 'yunxinUsername',
+          label: '云信用户名',
+          placeholder: '请输入云信平台用户名',
+          hint: '云信平台账号，与 CRM 企业 ID 不同',
+          rules: [{ required: true, whitespace: true, message: '请输入云信用户名', trigger: 'blur' }]
+        },
+        {
+          prop: 'yunxinUserId',
+          label: '企业 ID (userid)',
+          placeholder: 'CRM 分配的 12 位企业 ID',
+          hint: '参与请求鉴权，请按开户信息填写',
+          secret: true,
+          rules: digitsRule(12)
+        },
+        {
+          prop: 'yunxinAccessNumber',
+          label: '接入号',
+          placeholder: 'CRM 分配的 8 位接入号',
+          hint: '按字符串保存，保留前导零',
+          rules: digitsRule(8)
+        },
+        {
+          prop: 'yunxinExtendCode',
+          label: '扩展码',
+          placeholder: 'CRM 分配的 6 位扩展码',
+          hint: '与接入号拼接为发送请求的 taskid',
+          rules: digitsRule(6)
+        }
+      ]
+    }
+  },
   methods: {
     handleTabClick() {
       if (!['systemInfoConfig', 'fileEnvConfig', 'deepSeekEnvConfig'].includes(this.activeName)) {

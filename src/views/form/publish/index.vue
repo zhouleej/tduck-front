@@ -101,6 +101,8 @@
             </div>
           </div>
 
+          <sms-invite :form-key="formKey" :write-link="writeLink" />
+
           <div class="bottom-actions">
             <el-button class="danger-hover-btn" @click="stopPublishProject">
               <i class="el-icon-video-pause"></i> 停止发布
@@ -117,12 +119,14 @@
 
 <script>
 import VueQr from 'vue-qr'
+import SmsInvite from './SmsInvite.vue'
 import { getFormStatusRequest, publishFormRequest, stopPublishFormRequest } from '@/api/project/publish'
 
 export default {
   name: 'ProjectPublish',
   components: {
-    VueQr
+    VueQr,
+    SmsInvite
   },
   data() {
     return {
