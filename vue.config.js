@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 
 const name = process.env['VUE_APP_TITLE ']
+const localFormGenerator = path.resolve(__dirname, '../tduck-front-full/src/formgen/src/index.js')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -13,12 +14,12 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     disableHostCheck: true,
-    open: true,
-    port: 8888,
+    open: false,
+    port: Number(process.env.PORT || 8888),
     // 开发环境默认开启反向代理，如果不需要请自行注释
     proxy: {
       '/tduck-api': {
-        target: 'http://localhost:8999',
+        target: process.env.VUE_APP_DEV_API_TARGET || 'http://127.0.0.1:8999',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_API_ROOT]: ''
@@ -33,7 +34,9 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('src'),
-        'tduck-form-generator$': path.resolve(__dirname, '../tduck-front-full/src/formgen/src/index.js')
+        'tduck-form-generator$': fs.existsSync(localFormGenerator)
+          ? localFormGenerator
+          : require.resolve('tduck-form-generator')
       }
     }
   },
