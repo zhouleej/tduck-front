@@ -9,9 +9,19 @@
 export default {
   name: 'SmsInvite',
   props: { formKey: { type: String, required: true }, writeLink: { type: String, default: '' } },
-  methods: { open() { this.$router.push({ path: '/project/form/sms-invitations', query: { key: this.formKey } }) } }
+  methods: {
+    open() {
+      this.$router.push({ path: '/project/form/sms-invitations', query: { key: this.formKey } })
+    }
+  }
 }
 </script>
 <style scoped>
-.sms-invite-card { margin: 24px 0; }.sms-invite-card p { color: #6b7280; line-height: 1.8; }
+.sms-invite-card {
+  margin: 24px 0;
+}
+.sms-invite-card p {
+  color: #6b7280;
+  line-height: 1.8;
+}
 </style>

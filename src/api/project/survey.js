@@ -6,11 +6,22 @@ export const getSurveySettings = (formKey) => getRequest(`${root}/settings`, { f
 export const saveSurveySettings = (data) => postRequest(`${root}/settings`, data)
 export const listRecipients = (params) => getRequest(`${root}/recipients`, params)
 export const saveRecipient = (data) => postRequest(`${root}/recipients`, data)
+export const getRecipientProgress = (formKey, ids) => postRequest(`${root}/recipients/progress`, { formKey, ids })
 export const previewRecipients = (data) => postRequest(`${root}/recipients/preview`, data)
-export const confirmRecipients = (data) => request({ url: `${root}/recipients/import/confirm`, method: 'post', data, timeout: 120000 })
+export const confirmRecipients = (data) =>
+  request({ url: `${root}/recipients/import/confirm`, method: 'post', data, timeout: 120000 })
 export const previewRecipientFile = (formKey, file) => {
   const data = new FormData()
   data.append('file', file)
-  return request({ url: `${root}/recipients/import/preview`, method: 'post', params: { formKey }, data, headers: { 'Content-Type': 'multipart/form-data' } })
+  return request({
+    url: `${root}/recipients/import/preview`,
+    method: 'post',
+    params: { formKey },
+    data,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
 }
-export const exportRecipients = (formKey, template = false) => request({ url: `${root}/recipients/export`, params: { formKey, template }, responseType: 'blob' })
+export const exportRecipients = (formKey, template = false) =>
+  request({ url: `${root}/recipients/export`, params: { formKey, template }, responseType: 'blob' })
+export const getSurveyReport = (params) => getRequest(`${root}/report`, params)
+export const exportIncomplete = (params) => request({ url: `${root}/incomplete/export`, params, responseType: 'blob' })

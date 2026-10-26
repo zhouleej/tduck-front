@@ -211,7 +211,7 @@ export default {
           }
         }
         // 开启了密码填写
-        if (res.data && res.data.passwordWriteStatus) {
+        if (res.data && res.data.passwordWriteStatus && this.writeStatus === 1) {
           this.writeStatus = 3
         }
       }
