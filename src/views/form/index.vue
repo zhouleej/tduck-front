@@ -116,6 +116,11 @@ export default {
           route: '/project/form/sms-invitations'
         },
         {
+          title: '短信回复',
+          icon: 'el-icon-chat-line-square',
+          route: '/project/form/sms-replies'
+        },
+        {
           title: '发布',
           icon: 'el-icon-video-play',
           route: '/project/form/publish'
