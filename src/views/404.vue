@@ -32,9 +32,9 @@
       </div>
 
       <div class="card-footer">
-        <span class="footer-text">TDUCK 数据收集系统</span>
+        <span class="footer-text">云卷问卷数据系统</span>
         <span class="footer-divider">|</span>
-        <a href="https://gitee.com/tduckapp/tduck-platform" target="_blank" class="footer-link">联系开发者</a>
+        <a href="/" target="_blank" class="footer-link">联系开发者</a>
       </div>
     </div>
   </div>
@@ -442,3 +442,6 @@ export default {
   }
 }
 </style>
+
+
+

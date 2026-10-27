@@ -37,7 +37,7 @@
           }
         ]"
       >
-        <el-input v-model="submitSettingForm.submitJumpUrl" placeholder="例如：https://tduckapp.com" clearable />
+        <el-input v-model="submitSettingForm.submitJumpUrl" placeholder="例如：https://survey.example.com" clearable />
       </el-form-item>
       <div class="submit-btn">
         <el-button type="primary" icon="el-icon-check" @click="saveSettingHandle"> 保存设置 </el-button>
@@ -117,3 +117,5 @@ export default {
   justify-content: center;
 }
 </style>
+
+

@@ -6,7 +6,7 @@
           <i class="el-icon-back" />
         </div>
         <div class="logo-wrapper" @click="$router.push({ path: '/home' })">
-          <img src="@/assets/images/logo-tduck-ce.svg" alt="TDUCK Logo" class="form-logo-img" />
+          <img src="@/assets/images/mobile-survey-logo.png" alt="云卷问卷 Logo" class="form-logo-img" />
         </div>
       </div>
       <div class="header-right">
@@ -231,7 +231,8 @@ export default {
 
     .form-logo-img {
       height: 34px;
-      width: auto;
+      width: 34px;
+      object-fit: contain;
       display: block;
     }
   }
@@ -390,3 +391,5 @@ export default {
   }
 }
 </style>
+
+

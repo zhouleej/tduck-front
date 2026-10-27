@@ -11,7 +11,7 @@
         prop="systemName"
         :rules="[{ required: true, message: '请输入系统名称', trigger: 'blur' }]"
       >
-        <el-input v-model="form.systemName" placeholder="例如：Tduck 表单系统" class="modern-input" />
+        <el-input v-model="form.systemName" placeholder="例如：云卷问卷系统" class="modern-input" />
         <div class="form-hint">显示在浏览器标签页标题及系统多处文案中的名称</div>
       </el-form-item>
 
@@ -28,7 +28,7 @@
         prop="webBaseUrl"
         :rules="[{ required: true, message: '请输入项目前端所在域名', trigger: 'blur' }]"
       >
-        <el-input v-model="form.webBaseUrl" placeholder="例如：https://pro.tduckcloud.com/" class="modern-input" />
+        <el-input v-model="form.webBaseUrl" placeholder="例如：https://survey.example.com/" class="modern-input" />
         <div class="form-hint">
           * 请填写前端站点实际访问的完整域名，带上协议头（http:// 或 https://），并以斜杠 (/)
           结尾。用于拼接二维码及访问链接。
@@ -185,3 +185,5 @@ export default {
   }
 }
 </style>
+
+

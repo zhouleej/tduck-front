@@ -1,6 +1,6 @@
 <template>
   <div class="register-container">
-    <p class="tips">注册成为Tduck体验用户~</p>
+    <p class="tips">注册成为云卷问卷用户~</p>
     <el-tabs v-model="regType" class="register-form">
       <!--            <el-tab-pane label="手机号注册" name="regPhone">-->
       <!--                <el-form ref="phoneRegForm" :model="accountForm" :rules="phoneRegRules" label-width="0px">-->
@@ -240,3 +240,5 @@ export default {
   }
 }
 </style>
+
+

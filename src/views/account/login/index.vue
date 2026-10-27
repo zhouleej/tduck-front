@@ -6,18 +6,18 @@
     <div class="login-card-wrapper">
       <div class="logo-banner">
         <div class="banner-header">
-          <h1 class="brand-title">Tduck <span class="brand-badge">CE</span></h1>
+          <h1 class="brand-title">云卷问卷 <span class="brand-badge">平台</span></h1>
           <p class="brand-description">简单 · 专业 · 现代的问卷数据收集平台</p>
         </div>
         <div class="banner-illustration-box">
-          <img src="@/assets/images/login_illustration.png" alt="Tduck Illustration" />
+          <img src="@/assets/images/mobile-survey-logo.png" alt="云卷问卷图标" />
         </div>
       </div>
 
       <div class="logo-content" :class="{ 'register-mode': formType !== 'login' }">
         <div v-if="formType == 'login'" class="welcome-header">
           <span class="hello">Hello,</span>
-          <span class="tips">欢迎使用 Tduck！</span>
+          <span class="tips">欢迎使用云卷问卷！</span>
         </div>
 
         <el-tabs v-if="formType == 'login'" v-model="loginType" class="login-form-tab">
@@ -416,9 +416,10 @@ export default {
     align-items: center;
 
     img {
-      width: 100%;
-      max-width: 469px;
-      height: auto;
+      width: 240px;
+      height: 240px;
+      max-width: 70%;
+      object-fit: contain;
       filter: drop-shadow(0 20px 40px rgba(31, 35, 41, 0.06));
     }
   }
@@ -741,3 +742,5 @@ export default {
   }
 }
 </style>
+
+

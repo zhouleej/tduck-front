@@ -73,7 +73,7 @@ export default {
         formKey: '',
         preview: false,
         showBtns: true,
-        supportText: 'Powered By Tduck 填鸭表单'
+        supportText: '云卷问卷平台'
       },
       writeStatus: 1,
       // 不允许填写的提示信息
@@ -323,3 +323,6 @@ export default {
   padding: 20px;
 }
 </style>
+
+
+

@@ -4,7 +4,7 @@
     <div class="header-container">
       <div class="left-header">
         <div class="logo-wrapper" @click="$router.push({ path: '/' })">
-          <img src="@/assets/images/logo-tduck-ce.svg" alt="TDUCK Logo" class="home-logo-img" />
+          <img src="@/assets/images/mobile-survey-logo.png" alt="云卷问卷 Logo" class="home-logo-img" />
         </div>
       </div>
       <div class="right-header">
@@ -68,8 +68,8 @@
 
           <div class="about-container">
             <span class="desc-text">
-              <a href="https://www.tduckcloud.com" target="view_window">TDUCK 官网</a>
-              <span class="copyright-text">© 2026 TDUCK Group</span>
+              <a href="/home" target="view_window">云卷问卷</a>
+              <span class="copyright-text">© 2026 云卷问卷</span>
             </span>
           </div>
         </div>
@@ -273,7 +273,9 @@ export default {
       }
 
       .home-logo-img {
-        width: auto;
+        width: 52px;
+        height: 52px;
+        object-fit: contain;
         display: block;
       }
     }
@@ -627,3 +629,6 @@ export default {
   }
 }
 </style>
+
+
+
