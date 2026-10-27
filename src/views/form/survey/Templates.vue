@@ -4,8 +4,8 @@
     <p class="hint">绑定云信已有模板时，请核对完整正文。新模板可直接申请，审核通过后才能发送。</p>
     <el-alert v-if="capabilities.reason" :title="capabilities.reason" type="info" :closable="false" />
     <el-alert
-      v-if="!capabilities.enabled || !capabilities.templateCreate"
-      title="当前不能提交新模板：请管理员在系统配置→短信配置中开启“启用调研邀请”和“文本模板申请”。"
+      v-if="!capabilities.templateCreate"
+      title="当前不能提交新模板：请管理员在系统配置→短信配置中开启“文本模板申请”。公网问卷地址和“启用调研邀请”仅在创建短信邀请批次时需要。"
       type="warning"
       :closable="false"
       show-icon
